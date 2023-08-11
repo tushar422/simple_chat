@@ -6,6 +6,6 @@ messages & user data. Uses Firebase Authentication & Push
 Notifications. Ability to add contacts with QR code.
 
 To be completed:
-Push Notifications\n
+Push Notifications, 
 Social Logins
 
