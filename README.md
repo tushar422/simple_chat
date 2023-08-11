@@ -7,5 +7,5 @@ Notifications. Ability to add contacts with QR code.
 
 To be completed:
 Push Notifications, 
-Social Logins
+Social Logins, A few more tweaks
 
