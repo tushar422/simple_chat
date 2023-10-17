@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_chat/model/user.dart' as model;
 import 'package:flutter/material.dart';
 import 'package:simple_chat/screen/chat.dart';
+import 'package:simple_chat/widget/profile/profile_card_dialog.dart';
 
 class ContactsList extends StatefulWidget {
   const ContactsList({super.key});
@@ -56,8 +57,20 @@ class _ContactsListState extends State<ContactsList> {
               return ListView.builder(
                 itemBuilder: (ctx, index) {
                   return ListTile(
-                    leading: CircleAvatar(
-                      foregroundImage: NetworkImage(contacts[index].imgUrl!),
+                    leading: InkWell(
+                      borderRadius: BorderRadius.circular(100),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ProfileCardDialog(
+                                profile: contacts[index],
+                              );
+                            });
+                      },
+                      child: CircleAvatar(
+                        foregroundImage: NetworkImage(contacts[index].imgUrl!),
+                      ),
                     ),
                     title: Text(contacts[index].name),
                     onTap: () {

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_chat/model/user.dart' as model;
 
@@ -37,13 +41,22 @@ class _NewMessageRowState extends State<NewMessageRow> {
             controller: _messageController,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-              hintText: '  New Message',
+              hintText: 'New Message',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
+              // contentPadding:
+              suffixIcon: IconButton(
+                onPressed: _sendFile,
+                icon: Icon(
+                  Icons.attach_file_rounded,
+                  size: 20,
+                ),
+              ),
             ),
           )),
-          IconButton(
+          const SizedBox(width: 5),
+          IconButton.filled(
             onPressed: _sumbitMessage,
             icon: const Icon(Icons.send),
           ),
@@ -82,8 +95,36 @@ class _NewMessageRowState extends State<NewMessageRow> {
       'sender': user.uid,
       'receiver': widget.recipient.uid,
       'message': enteredMessage,
+
     });
 
     _messageController.clear();
+  }
+
+  void _sendFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.media,
+    );
+    if (result != null && result.paths[0]!=null) {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('attachments')
+          .child('${widget.cId}.jpg');
+      final file = File(result.paths[0]!);
+      await storageRef.putFile(file);
+      final url = await storageRef.getDownloadURL();
+      print(result.paths);
+      
+
+    }
+    // if (result != null) {
+    //   final storageRef = FirebaseStorage.instance
+    //       .ref()
+    //       .child('attachments')
+    //       .child('${credentials.user!.uid}.jpg');
+    //   await storageRef.putFile(_selectedImage!);
+    //   url = await storageRef.getDownloadURL();
+    // }
   }
 }

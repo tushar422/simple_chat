@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_chat/util/firebase.dart';
 import 'package:simple_chat/util/validator.dart';
 import 'package:simple_chat/widget/form/social_login_row.dart';
 
@@ -109,6 +110,8 @@ class _LoginAuthFormState extends State<LoginAuthForm> {
       final credentials = await firebaseAuth.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
+      final token = await getPushNotificationsToken();
+      updateDeviceToken(credentials.user!.uid, token ?? '');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email' ||
           e.code == 'user-disabled' ||

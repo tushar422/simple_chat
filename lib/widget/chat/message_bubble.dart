@@ -34,6 +34,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Stack(
       children: [
@@ -74,9 +75,9 @@ class MessageBubble extends StatelessWidget {
                       ),
                       child: Text(
                         username!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -84,9 +85,9 @@ class MessageBubble extends StatelessWidget {
                   // The "speech" box surrounding the message.
                   Container(
                     decoration: BoxDecoration(
-                      color: isMe
-                          ? Colors.grey[300]
-                          : theme.colorScheme.secondary.withAlpha(200),
+                      color: (isMe)
+                          ? colorScheme.primary
+                          : colorScheme.surfaceVariant,
                       // Only show the message bubble's "speaking edge" if first in
                       // the chain.
                       // Whether the "speaking edge" is on the left or right depends
@@ -121,9 +122,9 @@ class MessageBubble extends StatelessWidget {
                         // Add a little line spacing to make the text look nicer
                         // when multilined.
                         height: 1.3,
-                        color: isMe
-                            ? Colors.black87
-                            : theme.colorScheme.onSecondary,
+                        color: (isMe)
+                            ? colorScheme.onPrimary
+                            : colorScheme.onSurfaceVariant,
                       ),
                       softWrap: true,
                     ),

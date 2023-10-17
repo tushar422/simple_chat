@@ -3,6 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:simple_chat/util/fetch.dart';
+import 'package:simple_chat/util/firebase.dart';
+import 'package:simple_chat/widget/profile/profile_card_dialog.dart';
+import 'package:simple_chat/model/user.dart' as model;
+import 'package:simple_chat/widget/profile/qr_card_dialog.dart';
 
 class MyAccountSheet extends StatelessWidget {
   const MyAccountSheet({super.key});
@@ -13,6 +18,19 @@ class MyAccountSheet extends StatelessWidget {
       padding: const EdgeInsets.only(top: 30),
       children: [
         ListTile(
+          leading: const Icon(Icons.person_pin_rounded),
+          title: const Text('View Profile'),
+          onTap: () async {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return ProfileCardDialog.fromUID(
+                    uid: myUserId(),
+                  );
+                });
+          },
+        ),
+        ListTile(
           leading: const Icon(Icons.qr_code_2),
           title: const Text('Show QR'),
           onTap: () {
@@ -20,32 +38,9 @@ class MyAccountSheet extends StatelessWidget {
               context: context,
               builder: (ctx) {
                 final uid = FirebaseAuth.instance.currentUser!.uid;
-                return AlertDialog(
-                  alignment: Alignment.center,
-                  title: const Text('This is your QR.'),
-                  content: SizedBox(
-                    width: 250,
-                    child: Wrap(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: QrImageView(
-                            data: uid,
-                            version: QrVersions.auto,
-                            size: 250.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    ElevatedButton(
-                      child: const Text('Done'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+                return QRCardDialog(
+                  content: uid,
+                  title: 'This is your QR',
                 );
               },
             );
@@ -69,7 +64,13 @@ class MyAccountSheet extends StatelessWidget {
                       Expanded(
                         child: TextField(
                           controller: controller,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 25,
+                            ),
                             hintText: 'User ID',
                           ),
                         ),
@@ -90,8 +91,8 @@ class MyAccountSheet extends StatelessWidget {
                       },
                     ),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColorLight),
+                      // style: ElevatedButton.styleFrom(
+                      // backgroundColor: Theme.of(context).primaryColorLight),
                       child: const Text('Confirm'),
                       onPressed: () async {
                         if (controller.text.trim().isEmpty ||
@@ -147,7 +148,10 @@ class MyAccountSheet extends StatelessWidget {
                                 Theme.of(context).primaryColorLight),
                         child: const Text('Confirm'),
                         onPressed: () {
+                          updateDeviceToken(
+                              FirebaseAuth.instance.currentUser!.uid, '');
                           FirebaseAuth.instance.signOut();
+
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },

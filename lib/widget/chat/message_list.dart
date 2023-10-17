@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_chat/model/message.dart';
 import 'package:simple_chat/model/user.dart' as model;
-import 'package:simple_chat/widget/chat/chat_bubble.dart';
 import 'package:simple_chat/widget/chat/message_bubble.dart';
 
 class MessagesList extends StatefulWidget {
@@ -75,6 +73,7 @@ class _MessagesListState extends State<MessagesList> {
             final nextMsgId = nextMsg?['sender'];
             final image = (isMe) ? _userImg : widget.recipient.imgUrl;
             final username = (isMe) ? _userName : widget.recipient.name;
+
             if (currentMsgId == nextMsgId) {
               return MessageBubble.next(
                 message: currentMsg['message'],

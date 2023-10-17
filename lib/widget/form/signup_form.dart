@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_chat/util/firebase.dart';
 import 'package:simple_chat/util/validator.dart';
 import 'package:simple_chat/widget/form/social_login_row.dart';
 import 'package:simple_chat/widget/form/user_image_picker.dart';
@@ -129,6 +131,7 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
         await storageRef.putFile(_selectedImage!);
         url = await storageRef.getDownloadURL();
       }
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(credentials.user!.uid)
@@ -136,6 +139,7 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
         'username': _usernameController.text.trim(),
         'email': _emailController.text.trim(),
         'image_url': url,
+        'deviceToken': await getPushNotificationsToken()??'',
         'contacts': <String>[],
       });
     } on FirebaseAuthException catch (e) {
