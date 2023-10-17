@@ -1,7 +1,13 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:simple_chat/model/user.dart' as model;
 import 'package:simple_chat/util/firebase.dart';
 import 'package:simple_chat/widget/chat/message_list.dart';
@@ -61,9 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
-                    onTap: (){
-
-                    },
+                    onTap: _shareContact,
                     child: const Row(children: [
                       Icon(Icons.share),
                       SizedBox(width: 15),
@@ -107,13 +111,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             );
                           });
                     },
-                    child:const  Row(children: [
+                    child: const Row(children: [
                       Icon(Icons.delete_forever_rounded),
                       SizedBox(width: 15),
                       Text('Delete Contact')
                     ]),
                   ),
-                  
                 ];
               },
             ),
@@ -132,5 +135,25 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
         ));
+  }
+
+  void _shareContact() async {
+    final data = await QrPainter(
+      data: widget.contact.uid,
+      version: QrVersions.auto,
+    ).toImageData(200);
+    final filename = '${widget.contact.uid}.png';
+    final tempDir =
+        await getTemporaryDirectory(); // Get temporary directory to store the generated image
+    File file = await File('${tempDir.path}/$filename')
+        .create(); // Create a file to store the generated image
+    var bytes = data!.buffer.asUint8List(); // Get the image bytes
+    file = await file.writeAsBytes(bytes);
+    final xfile = XFile(file.path);
+    Share.shareXFiles([xfile],
+        text: 'TalkSpace Contact:\n'
+            'Name: ${widget.contact.name}\n'
+            'Email: ${widget.contact.email}\n'
+            'UID: ${widget.contact.uid}\n');
   }
 }

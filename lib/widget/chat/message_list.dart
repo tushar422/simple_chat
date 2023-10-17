@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_chat/model/message.dart';
 import 'package:simple_chat/model/user.dart' as model;
 import 'package:simple_chat/widget/chat/message_bubble.dart';
+import 'package:simple_chat/widget/chat/rich_message_bubble.dart';
 
 class MessagesList extends StatefulWidget {
   const MessagesList({
@@ -64,6 +66,9 @@ class _MessagesListState extends State<MessagesList> {
           reverse: true,
           itemCount: loadedMessages.length,
           itemBuilder: (context, index) {
+            String? typeString = loadedMessages[index].data()['type'];
+            if (typeString == null || typeString.isEmpty) typeString = 'text';
+            final type = MessageType.values.byName(typeString);
             final isMe = loadedMessages[index].data()['sender'] == _uid;
             final currentMsg = loadedMessages[index].data();
             final nextMsg = (index + 1 < loadedMessages.length)
@@ -75,17 +80,33 @@ class _MessagesListState extends State<MessagesList> {
             final username = (isMe) ? _userName : widget.recipient.name;
 
             if (currentMsgId == nextMsgId) {
-              return MessageBubble.next(
-                message: currentMsg['message'],
-                isMe: isMe,
-              );
+              return (type == MessageType.text)
+                  ? MessageBubble.next(
+                      message: currentMsg['message'],
+                      isMe: isMe,
+                    )
+                  : RichMessageBubble.next(
+                      message: currentMsg['message'],
+                      type: type,
+                      url: currentMsg['attachment'],
+                      isMe: isMe,
+                    );
             } else {
-              return MessageBubble.first(
-                userImage: image,
-                username: username,
-                message: currentMsg['message'],
-                isMe: isMe,
-              );
+              return (type == MessageType.text)
+                  ? MessageBubble.first(
+                      userImage: image,
+                      username: username,
+                      message: currentMsg['message'],
+                      isMe: isMe,
+                    )
+                  : RichMessageBubble.first(
+                      userImage: image,
+                      username: username,
+                      message: currentMsg['message'],
+                      type: type,
+                      url: currentMsg['attachment'],
+                      isMe: isMe,
+                    );
             }
             // final message = Message(
             //   message: loadedMessages[index].data()['message'],

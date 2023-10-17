@@ -11,3 +11,7 @@ String? validatePassword(String? pass) {
 String? validateUsername(String? user) {
   return (user??"").length >= 3 ? null : "Password must be of length greater than 3";
 }
+
+//identify file type
+
+
