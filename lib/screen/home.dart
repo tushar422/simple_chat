@@ -16,16 +16,16 @@ class _ChatsScreenState extends State<ChatsScreen> {
   @override
   void initState() {
     final acc = FirebaseAuth.instance.currentUser!;
-    if (acc.displayName?.isNotEmpty ?? false)
+    if (acc.displayName?.isNotEmpty ?? false) {
       displayName = acc.displayName!;
-    else
+    } else {
       displayName = acc.email!;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser!.displayName);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chats'),
@@ -34,8 +34,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
               onPressed: () {
                 showModalBottomSheet(
                     context: context,
+                    showDragHandle: true,
+                    useSafeArea: true,
                     builder: (context) {
-                      return MyAccountSheet();
+                      return const MyAccountSheet();
                     });
               },
               icon: CircleAvatar(
@@ -43,7 +45,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
               ))
         ],
       ),
-      body: ContactsList(),
+      body: const ContactsList(),
     );
   }
 }

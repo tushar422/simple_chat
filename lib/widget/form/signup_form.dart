@@ -46,6 +46,7 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
           TextFormField(
             controller: _emailController,
             validator: validateEmail,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
               label: Text('E-Mail'),
@@ -57,6 +58,7 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
           TextFormField(
             controller: _usernameController,
             validator: validateUsername,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             decoration: const InputDecoration(
               label: Text('Username'),
               border: OutlineInputBorder(),
@@ -67,6 +69,8 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
           TextFormField(
             controller: _passwordController,
             validator: validatePassword,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            keyboardType: TextInputType.visiblePassword,
             obscureText: _passwordObscured,
             decoration: InputDecoration(
               label: const Text('Password'),
@@ -102,7 +106,7 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
             ],
           ),
           const SizedBox(height: 30),
-          const SocialLoginRow(),
+          // const SocialLoginRow(),
         ],
       ),
     );
@@ -139,7 +143,7 @@ class _SignUpAuthFormState extends State<SignUpAuthForm> {
         'username': _usernameController.text.trim(),
         'email': _emailController.text.trim(),
         'image_url': url,
-        'deviceToken': await getPushNotificationsToken()??'',
+        'deviceToken': await getPushNotificationsToken() ?? '',
         'contacts': <String>[],
       });
     } on FirebaseAuthException catch (e) {

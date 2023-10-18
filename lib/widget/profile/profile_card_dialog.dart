@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:simple_chat/model/user.dart';
 import 'package:simple_chat/util/fetch.dart';
 import 'package:simple_chat/widget/common/toast.dart';
+import 'package:simple_chat/widget/profile/edit_profile_dialog.dart';
 import 'package:simple_chat/widget/profile/profile_shimmer.dart';
 import 'package:simple_chat/widget/profile/qr_card_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -73,7 +74,11 @@ class _ProfileCardDialogState extends State<ProfileCardDialog> {
                   padding: const EdgeInsets.fromLTRB(0, 40, 0, 5),
                   child: Text(
                     userProfile.name,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
                   ),
                 ),
                 ListTile(
@@ -124,21 +129,41 @@ class _ProfileCardDialogState extends State<ProfileCardDialog> {
                 ),
               ],
             ),
-      actions: [
-        if (myUserId() == userProfile.uid)
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: Icon(Icons.edit),
-            label: Text('Edit'),
-          ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Okay'),
-        ),
-      ],
+      actions: (!_loading)
+          ? [
+              if (myUserId() == userProfile.uid)
+                OutlinedButton(
+                  onPressed: (_loading)
+                      ? null
+                      : () {
+                          _openEditProfile();
+                        },
+                  child: Text('Edit'),
+                ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Okay'),
+              ),
+            ]
+          : null,
     );
+  }
+
+  void _openEditProfile() {
+    Navigator.pop(context);
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return EditProfileDialog(
+            profile: userProfile,
+          );
+        });
   }
 
   void _setProfile(String uid) async {

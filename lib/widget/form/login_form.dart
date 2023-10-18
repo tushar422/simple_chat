@@ -31,16 +31,21 @@ class _LoginAuthFormState extends State<LoginAuthForm> {
           TextFormField(
             controller: _emailController,
             validator: validateEmail,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             decoration: const InputDecoration(
               label: Text('E-Mail'),
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.alternate_email),
             ),
+            keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 10),
           TextFormField(
             controller: _passwordController,
             validator: validatePassword,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+
+            keyboardType: TextInputType.visiblePassword,
             obscureText: _passwordObscured,
             decoration: InputDecoration(
               label: const Text('Password'),
@@ -61,7 +66,12 @@ class _LoginAuthFormState extends State<LoginAuthForm> {
           const SizedBox(height: 20),
           Row(
             children: [
-              const Text('Keep me logged in:'),
+              Text(
+                'Keep me logged in:',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               Checkbox(
                 value: _staySignedInCheck,
                 onChanged: ((value) {
@@ -92,7 +102,7 @@ class _LoginAuthFormState extends State<LoginAuthForm> {
             ],
           ),
           const SizedBox(height: 30),
-          const SocialLoginRow(),
+          // const SocialLoginRow(),
         ],
       ),
     );

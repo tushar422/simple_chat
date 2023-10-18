@@ -88,10 +88,7 @@ class MessageBubble extends StatelessWidget {
                       color: (isMe)
                           ? colorScheme.primary
                           : colorScheme.surfaceVariant,
-                      // Only show the message bubble's "speaking edge" if first in
-                      // the chain.
-                      // Whether the "speaking edge" is on the left or right depends
-                      // on whether or not the message bubble is the current user.
+                      
                       borderRadius: BorderRadius.only(
                         topLeft: !isMe && isFirstInSequence
                             ? Radius.zero

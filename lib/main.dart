@@ -1,20 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:simple_chat/screen/chat.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_chat/screen/home.dart';
 import 'package:simple_chat/screen/splash.dart';
 import 'package:simple_chat/theme/color_schemes.dart';
-import 'package:simple_chat/util/firebase.dart';
 import 'firebase_options.dart';
 import 'package:simple_chat/screen/auth.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: binding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
@@ -24,30 +26,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Chat',
-      // darkTheme: ThemeData.dark(),
-      // darkTheme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(
-      //     brightness: Brightness.dark,
-      //     seedColor: const Color.fromARGB(255, 0, 19, 76),
-      //   ),
-      //   useMaterial3: true,
-      // ),
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(
-      //     seedColor: const Color.fromARGB(255, 0, 19, 76),
-      //   ),
-      //   useMaterial3: true,
-      // ),
+      title: 'TalkSpace',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
-        
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: darkColorScheme,
-        
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

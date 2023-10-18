@@ -17,18 +17,16 @@ class Message {
 }
 
 enum MessageType {
-  text,
-  //media way..
-  image,
+  text, // simple text message
+
+  image, //message with image/video attachment
   video,
 
-  //sent an attachment
-  fileUrl,
+  fileUrl, //message with file attachment
 
-  // sent a link
-  link,
+  link, // message with link attachment
 
-  //to be handled separately // sent a location, call invite.
-  location,
-  meet,
+  location, // message with location attachment
+
+  // meet,
 }

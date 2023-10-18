@@ -274,8 +274,7 @@ class RichMessageBubble extends StatelessWidget {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: OutlinedButton.icon(
-                                  label: Text('Play Video'),
+                                child: IconButton.filledTonal(
                                   onPressed: _launch,
                                   icon: Icon(Icons.play_arrow_rounded),
                                 ),
@@ -340,13 +339,22 @@ class RichMessageBubble extends StatelessWidget {
                                           'File Attachment',
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
-                                          style: textTheme.titleMedium,
+                                          style:
+                                              textTheme.titleMedium!.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                         ),
                                         Text(
                                           'Tap to open',
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
-                                          style: textTheme.bodySmall,
+                                          style: textTheme.bodySmall!.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -406,13 +414,22 @@ class RichMessageBubble extends StatelessWidget {
                                           'Location URL',
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
-                                          style: textTheme.titleMedium,
+                                          style:
+                                              textTheme.titleMedium!.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                         ),
                                         Text(
                                           'Tap to open',
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
-                                          style: textTheme.bodySmall,
+                                          style: textTheme.bodySmall!.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -472,13 +489,22 @@ class RichMessageBubble extends StatelessWidget {
                                           'Link',
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
-                                          style: textTheme.titleMedium,
+                                          style:
+                                              textTheme.titleMedium!.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                         ),
                                         Text(
                                           'Tap to open',
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
-                                          style: textTheme.bodySmall,
+                                          style: textTheme.bodySmall!.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                         ),
                                       ],
                                     ),

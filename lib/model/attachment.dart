@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:simple_chat/model/message.dart';
 
 class Attachment {

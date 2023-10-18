@@ -50,13 +50,23 @@ class _MessagesListState extends State<MessagesList> {
           );
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Text('Nothing to see here!'),
+          return Center(
+            child: Text(
+              'Nothing to see here!',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
           );
         }
         if (snapshot.hasError) {
-          return const Center(
-            child: Text('An error occurred!'),
+          return Center(
+            child: Text(
+              'An error occurred!',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
           );
         }
 

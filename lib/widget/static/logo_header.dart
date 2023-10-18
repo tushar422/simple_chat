@@ -9,13 +9,15 @@ class LogoHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 250,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color.fromARGB(255, 0, 19, 76),
-            Color.fromARGB(255, 0, 84, 152)
+            Theme.of(context).colorScheme.surface,
+            Theme.of(context).colorScheme.surfaceVariant,
+            // Color.fromARGB(255, 0, 19, 76),
+            // Color.fromARGB(255, 0, 84, 152)
           ],
         ),
       ),
@@ -25,21 +27,15 @@ class LogoHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            Icon(
-              FontAwesomeIcons.solidComments,
-              size: 70,
-              color: Theme.of(context).cardColor,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Simple Chat',
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.bold,
-              ).copyWith(
-                color: Theme.of(context).cardColor,
-                fontSize: 30,
+            FractionallySizedBox(
+              widthFactor: 0.7,
+              child: Image.asset(
+                (Theme.of(context).brightness == Brightness.dark)
+                    ? 'assets/logo-primary-dark.png'
+                    : 'assets/logo-primary-light.png',
               ),
             ),
+            //  Image.asset(),
           ],
         ),
       ),

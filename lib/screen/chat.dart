@@ -84,9 +84,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                 Icons.delete_sweep_rounded,
                                 size: 40,
                               ),
-                              title: Text('Are you sure?'),
+                              title: Text(
+                                'Are you sure?',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
+                                ),
+                              ),
                               content: Text(
-                                  '${widget.contact.name} will be removed from your contacts and your conversation here will be erased forever. Are you sure you want to continue?'),
+                                '${widget.contact.name} will be removed from your contacts and your conversation here will be erased forever. Are you sure you want to continue?',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
+                                ),
+                              ),
                               actions: [
                                 OutlinedButton(
                                   onPressed: () {

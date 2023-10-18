@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -52,6 +53,9 @@ class _NewMessageRowState extends State<NewMessageRow> {
             enabled: !_sending,
             controller: _messageController,
             textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             decoration: InputDecoration(
                 hintText: 'New Message',
                 border: OutlineInputBorder(
@@ -204,7 +208,9 @@ class _NewMessageRowState extends State<NewMessageRow> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Text(
                   'Message Options',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                 ),
               ),
               Divider(
@@ -216,7 +222,9 @@ class _NewMessageRowState extends State<NewMessageRow> {
                 subtitle: Text('Take and attach media from your camera.'),
                 leading: Icon(Icons.camera_alt_rounded),
                 shape: const StadiumBorder(),
-                onTap: () {},
+                onTap: () {
+                  _showCameraMediaOptions();
+                },
               ),
               ListTile(
                 title: Text('File Attachment'),
@@ -249,6 +257,88 @@ class _NewMessageRowState extends State<NewMessageRow> {
                 },
               ),
             ],
+          );
+        });
+  }
+
+  void _showCameraMediaOptions() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: _attachCameraImage,
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.all(10)),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      // color: Theme.of(context).colorScheme.surface,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.image_rounded,
+                          size: 45,
+                        ),
+                        Text(
+                          'Image',
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: _attachCameraVideo,
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.all(10)),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      // color: Theme.of(context).colorScheme.surface,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.video_collection_rounded,
+                          size: 45,
+                        ),
+                        Text(
+                          'Video',
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         });
   }
@@ -287,6 +377,52 @@ class _NewMessageRowState extends State<NewMessageRow> {
     }
   }
 
+  void _attachCameraMediaFile() async {
+    final imagePicker = ImagePicker();
+    await imagePicker.pickVideo(source: ImageSource.camera);
+    // final result = await FilePicker.platform.pickFiles(
+    //   allowMultiple: false,
+    //   type: FileType.media,
+    // );
+    // if (result != null && result.paths[0] != null) {
+    //   final fileName = path.basename(result.paths[0]!);
+    //   final type = getMessageType(fileName);
+    //   setState(() {
+    //     _attachment = Attachment(type: type, file: File(result.paths[0]!));
+    //   });
+
+    //   print(result.paths);
+    // }
+  }
+
+  void _attachCameraImage() async {
+    final picker = ImagePicker();
+    final result = await picker.pickImage(source: ImageSource.camera);
+    if (result == null) return;
+    final file = File(result.path);
+    final type = MessageType.image;
+    setState(() {
+      _attachment = Attachment(type: type, file: file);
+    });
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  void _attachCameraVideo() async {
+    final picker = ImagePicker();
+    final result = await picker.pickVideo(source: ImageSource.camera);
+    if (result == null) return;
+
+    final file = File(result.path);
+    final type = MessageType.video;
+    setState(() {
+      _attachment = Attachment(type: type, file: file);
+    });
+
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
   void _attachLocation() async {
     showDialog(
       context: context,
@@ -296,9 +432,18 @@ class _NewMessageRowState extends State<NewMessageRow> {
             Icons.pin_drop_rounded,
             size: 50,
           ),
-          title: Text('Attach Location'),
+          title: Text(
+            'Attach Location',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
+          ),
           content: Text(
-              'Do you want to send your current location. Grant the location permissions if asked.'),
+            'Do you want to send your current location. Grant the location permissions if asked.',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
+          ),
           actions: [
             OutlinedButton(
               child: Text('Back'),
@@ -336,12 +481,21 @@ class _NewMessageRowState extends State<NewMessageRow> {
             Icons.ads_click,
             size: 50,
           ),
-          title: Text('Attach Link'),
+          title: Text(
+            'Attach Link',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                  'Enter the URL you want to attach to the message. Make sure it\'s a valid URL.'),
+                'Enter the URL you want to attach to the message. Make sure it\'s a valid URL.',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+              ),
               const SizedBox(height: 20),
               TextField(
                 controller: _controller,
@@ -351,6 +505,9 @@ class _NewMessageRowState extends State<NewMessageRow> {
                   ),
                   hintText: 'Enter URL',
                   contentPadding: EdgeInsets.all(20),
+                ),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
               ),
             ],

@@ -8,9 +8,16 @@ class SocialLoginRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text('Or choose one of these')],
+          children: [
+            Text(
+              'Or choose one of these',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            )
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -15,7 +15,8 @@ class MyAccountSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.only(top: 30),
+      shrinkWrap: true,
+      // padding: const EdgeInsets.only(top: 30),
       children: [
         ListTile(
           leading: const Icon(Icons.person_pin_rounded),
@@ -58,12 +59,22 @@ class MyAccountSheet extends StatelessWidget {
                 final controller = TextEditingController();
                 return AlertDialog(
                   icon: const Icon(Icons.person_add),
-                  title: const Text('Enter User ID of Contact:'),
+                  title: Text(
+                    'Enter User ID of Contact:',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                  ),
                   content: Row(
                     children: [
                       Expanded(
                         child: TextField(
                           controller: controller,
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                          ),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
@@ -132,9 +143,24 @@ class MyAccountSheet extends StatelessWidget {
                 context: context,
                 builder: (ctx) {
                   return AlertDialog(
-                    icon: const Icon(Icons.logout),
-                    title: const Text('Do you want to log out?'),
-                    content: const SizedBox(height: 30),
+                    icon: const Icon(
+                      Icons.logout,
+                      size: 40,
+                    ),
+                    title: Text(
+                      'Do you want to log out?',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                    ),
+                    content: Text(
+                      'Your account will be logged out of this device.',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                    ),
                     actions: [
                       TextButton(
                         child: const Text('Go back'),
@@ -144,8 +170,11 @@ class MyAccountSheet extends StatelessWidget {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).primaryColorLight),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                        ),
                         child: const Text('Confirm'),
                         onPressed: () {
                           updateDeviceToken(
@@ -164,6 +193,24 @@ class MyAccountSheet extends StatelessWidget {
             //
           },
         ),
+        // SizedBox(height: 50),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: FractionallySizedBox(
+              widthFactor: 0.4,
+              child: Opacity(
+                opacity: 0.4,
+                child: Image.asset(
+                  (Theme.of(context).brightness == Brightness.dark)
+                      ? 'assets/logo-onsurface-dark.png'
+                      : 'assets/logo-onsurface-light.png',
+                ),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

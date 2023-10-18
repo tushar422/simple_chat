@@ -29,15 +29,25 @@ class _ContactsListState extends State<ContactsList> {
             );
           }
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('An error occurred!'),
+            return Center(
+              child: Text(
+                'An error occurred!',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
             );
           }
           final fetchedContacts =
               List<String>.from(snapshot.data!.data()!['contacts'] ?? []);
           if (fetchedContacts.isEmpty) {
-            return const Center(
-              child: Text('You have no contacts!'),
+            return Center(
+              child: Text(
+                'You have no contacts!',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
             );
           }
 

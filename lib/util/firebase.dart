@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<String?> getPushNotificationsToken() async {
@@ -13,10 +12,6 @@ void updateDeviceToken(String uid, String token) async {
   await collectionReference.doc(uid).update({'deviceToken': token});
 }
 
-//delete from host's contacts[]
-//delete from reciever's contacts[]
-//delete their conversation.
-//delete their attachments.
 Future<void> deleteContactMutually({
   required String uid1,
   required String uid2,
@@ -46,17 +41,16 @@ Future<void> deleteContactMutually({
       'contacts': destContacts,
     });
     await convRef.delete();
-    // to delete attachments
-  });
-  // await FirebaseFirestore.instance.runTransaction((transaction) async {
-  //   final currentUserSnapshot = await transaction.get(destRef);
+    final messageCollectionRef = convRef.collection('messages');
 
-  //   List<dynamic> currentContacts = (currentUserSnapshot.data())?['contacts'];
-  //   currentContacts.remove(uid1);
-  //   transaction.update(selfRef, {
-  //     'contacts': currentContacts,
-  //   });
-  // });
+    // Get all of the documents in the message collection.
+    final documents = await messageCollectionRef.get();
+
+    // Delete each of the documents in the message collection.
+    for (final document in documents.docs) {
+      await document.reference.delete();
+    }
+  });
 }
 
 String getConvId(String u1, String u2) {
